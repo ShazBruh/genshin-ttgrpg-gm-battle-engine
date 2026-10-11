@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Genshin TTRPG — GM Battle Engine</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Marcellus&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body class="text-slate-200 min-h-screen">
+
+<!-- ============================ BACKGROUND LAYER ============================ -->
+<div id="bgLayer" aria-hidden="true">
+  <div id="bgImage"></div>
+  <div id="bgDim"></div>
+</div>
+
+<!-- ============================ HEADER ============================ -->
+<header class="sticky top-0 z-30 bg-slate-900/90 backdrop-blur border-b border-slate-800">
+  <div class="max-w-[1800px] mx-auto px-4 py-3 flex flex-wrap items-center gap-3">
+    <h1 class="text-base md:text-xl font-bold tracking-wide bg-gradient-to-r from-amber-300 via-rose-400 to-violet-400 bg-clip-text text-transparent select-none">
+      ⚔ Genshin TTRPG — GM Battle Engine
+    </h1>
+
+    <div id="roundBadge"
+      class="px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-xs font-semibold text-amber-300">
+      Round 1
+    </div>
+
+    <div class="ml-auto flex items-center gap-2 flex-wrap">
+      <button id="bgPickBtn"
+        class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-violet-700 border border-slate-700 hover:border-violet-500 active:scale-95 transition text-xs font-bold uppercase tracking-wide text-slate-300 hover:text-white"
+        title="Pick a background image">
+        🖼 Background
+      </button>
+      <input type="file" id="bgFileInput" accept="image/*" class="hidden" />
+
+      <button id="nextTurnBtn"
+        class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition text-xs font-bold uppercase tracking-wide text-white shadow-lg shadow-emerald-900/40">
+        ▶ Next Turn
+      </button>
+      <button id="restRoundBtn"
+        class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 active:scale-95 transition text-xs font-bold uppercase tracking-wide text-white shadow-lg shadow-indigo-900/40">
+        ⟳ Rest Round
+      </button>
+      <button id="resetBtn"
+        class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-rose-700 border border-slate-700 hover:border-rose-600 active:scale-95 transition text-xs font-bold uppercase tracking-wide text-slate-300 hover:text-white">
+        ✕ Reset
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============================ MAIN ============================ -->
+<main class="max-w-[1800px] mx-auto p-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
+
+  <!-- ---------------- LEFT: TURN ORDER + ROSTER ---------------- -->
+  <section class="lg:col-span-4">
+    <div class="lg:sticky lg:top-[4.75rem] space-y-3">
+
+      <!-- Turn Order Tracker -->
+      <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-3 backdrop-blur">
+        <div class="flex items-center justify-between mb-2 px-1">
+          <h2 class="text-sm font-bold uppercase tracking-widest text-slate-400">Turn Order</h2>
+          <span class="text-[10px] text-slate-500 font-mono">sorted by SPD ↓</span>
+        </div>
+        <div id="turnOrder" class="flex gap-2 overflow-x-auto scroll-thin pb-1"></div>
+      </div>
+
+      <!-- Core Panel (Dendro Cores on the field) -->
+      <div id="corePanel" class="hidden bg-gradient-to-br from-green-950/60 to-slate-900/70 border border-green-800/60 rounded-2xl p-3 backdrop-blur">
+        <div class="flex items-center justify-between mb-2 px-1">
+          <h2 class="text-sm font-bold uppercase tracking-widest text-green-300/80">Field</h2>
+          <span class="text-[10px] text-slate-500 font-mono">Dendro Cores</span>
+        </div>
+        <div id="coreContent"></div>
+      </div>
+
+      <!-- Roster -->
+      <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-3 backdrop-blur">
+        <div class="flex items-center justify-between mb-3 px-1">
+          <h2 class="text-sm font-bold uppercase tracking-widest text-slate-400">Combatants</h2>
+          <span id="rosterCount" class="text-[11px] text-slate-500 font-mono">0 entities</span>
+        </div>
+        <div id="roster" class="space-y-2.5 lg:max-h-[calc(100vh-19rem)] lg:overflow-y-auto scroll-thin pr-1"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------- CENTER: ACTION CONTROLLER ---------------- -->
+  <section class="lg:col-span-4">
+    <div class="lg:sticky lg:top-[4.75rem] bg-slate-900/70 border border-slate-800 rounded-2xl p-4 backdrop-blur space-y-4">
+      <h2 class="text-sm font-bold uppercase tracking-widest text-slate-400">Action Controller</h2>
+
+      <!-- Step 1 -->
+      <div class="space-y-1.5">
+        <label class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+          <span class="w-5 h-5 grid place-items-center rounded-md bg-amber-500/20 text-amber-300 text-[10px]">1</span>
+          Attacker
+        </label>
+        <select id="attackerSelect" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2.5 text-sm text-slate-100"></select>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="space-y-1.5">
+        <label class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+          <span class="w-5 h-5 grid place-items-center rounded-md bg-rose-500/20 text-rose-300 text-[10px]">2</span>
+          Target
+        </label>
+        <select id="targetSelect" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2.5 text-sm text-slate-100"></select>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="space-y-2">
+        <label class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+          <span class="w-5 h-5 grid place-items-center rounded-md bg-violet-500/20 text-violet-300 text-[10px]">3</span>
+          Action
+        </label>
+
+        <!-- Catalyst toggle — before the attack buttons -->
+        <label class="flex items-center gap-2.5 cursor-pointer select-none rounded-lg border border-slate-800 bg-slate-950/60 px-3 py-2 hover:border-sky-700/60 transition">
+          <input id="catalystChk" type="checkbox" class="w-4 h-4 accent-sky-500 rounded" />
+          <span class="text-xs text-slate-300">Catalyst User</span>
+          <span class="text-[10px] text-slate-500 ml-auto">Normal / Charged applies element</span>
+        </label>
+
+        <div id="actionGrid" class="grid grid-cols-2 gap-2"></div>
+      </div>
+
+      <!-- Modifiers -->
+      <div class="rounded-xl border border-slate-800 bg-slate-950/50 p-3 space-y-3">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Modifiers</div>
+
+        <label class="flex items-center gap-2.5 cursor-pointer select-none">
+          <input id="critChk" type="checkbox" class="w-4 h-4 accent-amber-500 rounded" />
+          <span class="text-sm text-slate-300">Critical Hit? <span class="text-slate-500 text-xs">(+ Crit DMG)</span></span>
+        </label>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-[10px] uppercase tracking-wider text-slate-500 mb-1">Bonus / Penalty DMG</label>
+            <input id="bonusInput" type="number" value="0" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-sm" />
+          </div>
+          <div>
+            <label class="block text-[10px] uppercase tracking-wider text-slate-500 mb-1">Heal / Shield Amt</label>
+            <input id="amountInput" type="number" value="5" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-sm" />
+          </div>
+        </div>
+      </div>
+
+      <button id="executeBtn"
+        class="w-full py-4 rounded-xl font-black uppercase tracking-widest text-sm
+               bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-slate-950
+               hover:from-amber-400 hover:via-orange-400 hover:to-rose-400
+               active:scale-[.98] transition shadow-xl shadow-orange-900/30">
+        ▶ Execute Action
+      </button>
+    </div>
+  </section>
+
+  <!-- ---------------- RIGHT: LOG / HISTORY / PRESETS ---------------- -->
+  <section class="lg:col-span-4 space-y-3">
+    <div class="lg:sticky lg:top-[4.75rem] space-y-3">
+
+      <!-- Log + History Tabs -->
+      <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-3 backdrop-blur">
+        <div class="flex items-center gap-2 mb-3">
+          <button data-tab="log"
+            class="tab-btn active px-3 py-1.5 rounded-lg border border-slate-700 text-[11px] font-bold uppercase tracking-wider text-slate-400 transition">
+            Live Log
+          </button>
+          <button data-tab="history"
+            class="tab-btn px-3 py-1.5 rounded-lg border border-slate-700 text-[11px] font-bold uppercase tracking-wider text-slate-400 transition">
+            Combat History
+          </button>
+          <button id="clearLogBtn"
+            class="ml-auto text-[10px] uppercase tracking-wider text-slate-500 hover:text-rose-400 transition">
+            Clear
+          </button>
+        </div>
+
+        <div id="tabPanel-log">
+          <div id="logFeed" class="h-72 lg:h-[calc(100vh-32rem)] lg:min-h-[12rem] overflow-y-auto scroll-thin space-y-1.5 text-[13px] leading-relaxed pr-1"></div>
+        </div>
+
+        <div id="tabPanel-history" class="hidden">
+          <div class="max-h-[calc(100vh-32rem)] min-h-[12rem] overflow-auto scroll-thin rounded-lg border border-slate-800">
+            <table class="w-full text-left border-collapse">
+              <thead class="sticky top-0 bg-slate-900 z-10">
+                <tr class="border-b border-slate-700">
+                  <th class="px-2 py-2 text-[9px] uppercase tracking-wider text-slate-500 font-bold">#</th>
+                  <th class="px-2 py-2 text-[9px] uppercase tracking-wider text-slate-500 font-bold">Rnd</th>
+                  <th class="px-2 py-2 text-[9px] uppercase tracking-wider text-slate-500 font-bold">Attacker</th>
+                  <th class="px-2 py-2 text-[9px] uppercase tracking-wider text-slate-500 font-bold">Target</th>
+                  <th class="px-2 py-2 text-[9px] uppercase tracking-wider text-slate-500 font-bold">Action</th>
+                  <th class="px-2 py-2 text-[9px] uppercase tracking-wider text-slate-500 font-bold">Result</th>
+                </tr>
+              </thead>
+              <tbody id="historyBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Spawn Presets -->
+      <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-3 backdrop-blur">
+        <div class="flex items-center justify-between mb-2.5 px-1">
+          <h2 class="text-sm font-bold uppercase tracking-widest text-slate-400">Quick Spawn</h2>
+          <button id="openImportBtn"
+            class="text-[10px] uppercase tracking-wider font-bold text-violet-400 hover:text-violet-300 transition">
+            + Import JSON
+          </button>
+        </div>
+        <div id="presetGrid" class="grid grid-cols-2 gap-2"></div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<!-- ============================ IMPORT MODAL ============================ -->
+<div id="importModal" class="modal hidden">
+  <div class="modal-backdrop" data-close-modal></div>
+  <div class="modal-panel">
+    <div class="flex items-center justify-between px-5 py-4 border-b border-slate-800">
+      <h3 class="text-sm font-bold uppercase tracking-widest text-slate-300">Import Combatants (JSON)</h3>
+      <button data-close-modal class="text-slate-500 hover:text-rose-400 transition text-lg leading-none px-1">✕</button>
+    </div>
+
+    <div class="p-5 space-y-3">
+      <div class="flex items-center gap-2 flex-wrap">
+        <button data-example="players" class="example-tab px-3 py-1.5 rounded-lg border border-slate-700 text-[11px] font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200 transition">
+          Player Example
+        </button>
+        <button data-example="enemies" class="example-tab px-3 py-1.5 rounded-lg border border-slate-700 text-[11px] font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200 transition">
+          Enemy Example
+        </button>
+
+        <div class="ml-auto flex items-center gap-2">
+          <button id="browseFileBtn"
+            class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-[11px] font-bold uppercase tracking-wider text-slate-200 transition">
+            📁 Choose JSON File
+          </button>
+          <span id="fileNameLabel" class="text-[10px] text-slate-500 truncate max-w-[10rem]"></span>
+        </div>
+
+        <input type="file" id="importFile" accept=".json,application/json" class="hidden" />
+      </div>
+
+      <textarea id="importTextarea" rows="12" spellcheck="false"
+        placeholder='[ { "name": "Keqing", "type": "player", "vision": "Electro", ... } ]'
+        class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-[11px] font-mono text-slate-300 resize-y scroll-thin"></textarea>
+
+      <p class="text-[11px] text-slate-500 leading-relaxed">
+        Accepts a single object or an array. Required fields: <code class="text-slate-400">name</code>,
+        <code class="text-slate-400">type</code>, <code class="text-slate-400">hp_max</code>,
+        <code class="text-slate-400">atk</code>, <code class="text-slate-400">def</code>,
+        <code class="text-slate-400">spd</code>, <code class="text-slate-400">vision</code>.
+        Missing fields default sensibly.
+      </p>
+
+      <p id="importMsg" class="text-[11px] min-h-[1rem]"></p>
+    </div>
+
+    <div class="flex items-center justify-end gap-2 px-5 py-4 border-t border-slate-800">
+      <button data-close-modal
+        class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold uppercase tracking-wide text-slate-300 transition">
+        Cancel
+      </button>
+      <button id="doImportBtn"
+        class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-bold uppercase tracking-wide text-white transition">
+        Import
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ ROUND BANNER ============================ -->
+<div id="roundBanner" class="round-banner hidden">
+  <div class="text-center select-none">
+    <div class="text-[11px] uppercase tracking-[0.5em] text-amber-300/80 mb-1">Round</div>
+    <div id="roundBannerNumber" class="text-8xl font-black leading-none bg-gradient-to-b from-amber-200 via-amber-400 to-rose-500 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(251,191,36,.35)]">
+      2
+    </div>
+    <div class="mt-3 text-sm text-slate-300">
+      Begins with <b id="roundBannerFirst" class="text-amber-300">—</b>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ TURN BANNER ============================ -->
+<div id="turnBanner" class="turn-banner hidden">
+  <div class="text-center select-none">
+    <div class="text-[11px] uppercase tracking-[0.5em] text-emerald-300/80 mb-2">Now Acting</div>
+    <div id="turnBannerName"
+      class="text-7xl font-black leading-none text-emerald-200 drop-shadow-[0_0_30px_rgba(16,185,129,.55)]">
+      —
+    </div>
+    <div class="mt-3 text-sm text-slate-300">
+      Speed <b id="turnBannerSpd" class="text-emerald-300">—</b>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ REACTION OVERLAY ============================ -->
+<div id="reactionOverlay" class="reaction-overlay hidden">
+  <div class="reaction-inner">
+    <div class="reaction-pair">
+      <div class="reaction-elem" id="reactionElemA"></div>
+      <div class="reaction-plus">+</div>
+      <div class="reaction-elem" id="reactionElemB"></div>
+    </div>
+    <div class="reaction-title" id="reactionTitle">VAPORIZE</div>
+  </div>
+</div>
+
+<!-- ============================ BACKGROUND CONTROLS ============================ -->
+<div id="bgControls" class="hidden fixed bottom-4 right-4 z-40 bg-slate-900/95 border border-slate-700 rounded-xl shadow-2xl backdrop-blur px-3 py-2 flex items-center gap-3">
+  <span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Dim</span>
+  <input id="bgDimRange" type="range" min="0" max="95" value="65" class="bg-range w-32" />
+  <span id="bgDimValue" class="text-[10px] font-mono text-amber-300 w-9 text-right">65%</span>
+  <button id="bgChangeBtn"
+    class="px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-[10px] font-bold uppercase tracking-wider text-slate-200 transition">
+    Change
+  </button>
+  <button id="bgRemoveBtn"
+    class="px-2.5 py-1 rounded-md bg-slate-800 hover:bg-rose-700 text-[10px] font-bold uppercase tracking-wider text-rose-300 hover:text-white transition">
+    Remove
+  </button>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

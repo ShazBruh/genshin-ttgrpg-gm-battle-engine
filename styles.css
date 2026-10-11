@@ -1,0 +1,317 @@
+/* ============================================================
+ *  Genshin TTRPG GM Engine — Custom CSS layer
+ *  ============================================================ */
+
+@font-face {
+  font-family: 'HYWenHei';
+  src: url('fonts/zhcn.ttf') format('truetype');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  font-family: 'HYWenHei', 'Cinzel', 'Marcellus', ui-serif, Georgia, serif;
+  background-color: #020617; /* slate-950 — the base canvas */
+}
+
+/* ============================================================
+ *  BACKGROUND LAYER (image + dim overlay)
+ *  ============================================================ */
+#bgLayer {
+position: fixed;
+inset: 0;
+z-index: -1;
+pointer-events: none;
+background-color: #020617;
+background-image: radial-gradient(ellipse at top,
+                                  rgba(30,41,59,.65) 0%,
+                                  transparent 65%);
+background-repeat: no-repeat;
+background-size: cover;
+}
+
+#bgImage {
+position: absolute;
+inset: 0;
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+display: none;
+transition: background-image .35s ease;
+}
+
+#bgDim {
+position: absolute;
+inset: 0;
+background-color: #020617;
+display: none;
+transition: opacity .2s ease;
+}
+
+/* ============================================================
+ *  BACKGROUND DIM SLIDER (custom range input)
+ *  ============================================================ */
+.bg-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 999px;
+  background: #334155;
+  outline: none;
+  cursor: pointer;
+}
+.bg-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fbbf24;
+  border: 2px solid #0f172a;
+  box-shadow: 0 0 8px rgba(251,191,36,.6);
+  cursor: pointer;
+}
+.bg-range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fbbf24;
+  border: 2px solid #0f172a;
+  box-shadow: 0 0 8px rgba(251,191,36,.6);
+  cursor: pointer;
+}
+
+/* --- Thin scrollbars --- */
+.scroll-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+.scroll-thin::-webkit-scrollbar-track { background: rgba(15,23,42,.5); border-radius: 999px; }
+.scroll-thin::-webkit-scrollbar-thumb { background: #334155; border-radius: 999px; }
+.scroll-thin::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* --- Log entry fade-in --- */
+.log-entry { animation: fadeIn .22s ease-out; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-3px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* --- Stat +/- buttons --- */
+.stat-btn {
+  width: 1.15rem; height: 1.15rem;
+  display: grid; place-items: center;
+  border-radius: .3rem;
+  background: #1e293b; color: #94a3b8;
+  font-size: 11px; font-weight: 700; line-height: 1;
+  cursor: pointer;
+  transition: background .12s, color .12s, transform .08s;
+}
+.stat-btn:hover  { background: #334155; color: #e2e8f0; }
+.stat-btn:active { transform: scale(.9); }
+
+/* --- Pip indicators --- */
+.pip {
+  width: .6rem; height: .6rem;
+  border-radius: 2px;
+  display: inline-block;
+  transition: background .15s, box-shadow .15s;
+}
+
+/* --- Modal --- */
+.modal {
+  position: fixed; inset: 0; z-index: 80;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.modal.hidden { display: none; }
+.modal-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(2,6,23,.82);
+  backdrop-filter: blur(4px);
+}
+.modal-panel {
+  position: relative;
+  width: 100%; max-width: 44rem; max-height: 88vh;
+  overflow-y: auto;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 1rem;
+  box-shadow: 0 25px 60px -12px rgba(0,0,0,.8);
+  animation: pop .18s ease-out;
+}
+@keyframes pop {
+  from { opacity: 0; transform: scale(.96) translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* --- Tabs --- */
+.tab-btn.active {
+  background: rgba(251,191,36,.14);
+  color: #fcd34d;
+  border-color: rgba(251,191,36,.5);
+}
+
+/* --- Turn order chip --- */
+.turn-chip { transition: all .2s ease; }
+.turn-chip.active {
+  border-color: #fbbf24;
+  background: rgba(251,191,36,.1);
+  box-shadow: 0 0 0 2px rgba(251,191,36,.25), 0 0 18px rgba(251,191,36,.25);
+}
+
+/* --- Number input cleanup --- */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { -moz-appearance: textfield; }
+
+/* --- Focus ring --- */
+select:focus, input:focus, textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(251,191,36,.45);
+}
+
+/* ============================================================
+ *  ROUND BANNER (full-screen, amber)
+ *  ============================================================ */
+.round-banner {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(2, 6, 23, .82);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+  animation: bannerInOut 2.2s ease-out forwards;
+}
+.round-banner.hidden { display: none; }
+
+@keyframes bannerInOut {
+  0%   { opacity: 0; transform: scale(.92); }
+  12%  { opacity: 1; transform: scale(1); }
+  78%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.06); }
+}
+
+/* ============================================================
+ *  TURN BANNER (full-screen, emerald)
+ *  ============================================================ */
+.turn-banner {
+  position: fixed; inset: 0; z-index: 97;
+  display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(ellipse at center,
+                              rgba(6,78,59,.55) 0%,
+                              rgba(2,6,23,.88) 72%);
+  backdrop-filter: blur(5px);
+  pointer-events: none;
+  animation: turnBannerAnim 1.6s ease-out forwards;
+}
+.turn-banner.hidden { display: none; }
+
+@keyframes turnBannerAnim {
+  0%   { opacity: 0; transform: scale(.94); }
+  14%  { opacity: 1; transform: scale(1); }
+  76%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.05); }
+}
+
+/* ============================================================
+ *  ELEMENTAL REACTION OVERLAY (full-screen, purple)
+ *  ============================================================ */
+.reaction-overlay {
+  position: fixed; inset: 0; z-index: 95;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center,
+                              rgba(88,28,135,.45) 0%,
+                              rgba(2,6,23,.92) 72%);
+  backdrop-filter: blur(6px);
+  animation: reactionAnim 2.6s ease-out forwards;
+}
+.reaction-overlay.hidden { display: none; }
+
+.reaction-inner { display: flex; flex-direction: column; align-items: center; gap: 1.75rem; }
+.reaction-pair  { display: flex; align-items: center; gap: 2rem; }
+
+.reaction-elem {
+  width: 160px; height: 160px;
+  display: grid; place-items: center;
+  border-radius: 1.75rem;
+  background: rgba(15,23,42,.92);
+  border: 4px solid currentColor;
+  box-shadow:
+  0 0 50px currentColor,
+  0 0 100px rgba(255,255,255,.15),
+  inset 0 0 40px rgba(255,255,255,.06);
+}
+
+.reaction-plus {
+  font-size: 4rem; font-weight: 900;
+  color: #fbbf24;
+  text-shadow: 0 0 26px rgba(251,191,36,.95);
+  line-height: 1;
+}
+
+.reaction-title {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 900;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  background: linear-gradient(to bottom, #fef3c7 0%, #fbbf24 45%, #f43f5e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 26px rgba(251,191,36,.65));
+  text-align: center;
+  padding-left: .2em;
+}
+
+@keyframes reactionAnim {
+  0%   { opacity: 0; transform: scale(.88); }
+  12%  { opacity: 1; transform: scale(1); }
+  82%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.08); }
+}
+
+/* ============================================================
+ *  ELEMENT ICON WRAPPER
+ *  ============================================================ */
+.elem-icon-wrap {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+/* ============================================================
+ *  ELEMENT CHIPS / BADGES
+ *  ============================================================ */
+.elem-chip {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .1rem .4rem;
+  border-radius: .375rem;
+  border: 1px solid;
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .03em;
+  line-height: 1; white-space: nowrap;
+}
+.elem-badge {
+  display: inline-grid; place-items: center;
+  border-radius: 50%;
+  border: 1px solid;
+}
+
+/* ============================================================
+ *  DISABLED ACTION BUTTONS
+ *  ============================================================ */
+.action-disabled {
+  opacity: .32;
+  filter: grayscale(.7);
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
+/* ============================================================
+ *  FIELD PANEL — Dendro Core glow
+ *  ============================================================ */
+#corePanel {
+box-shadow:
+inset 0 0 0 1px rgba(34, 197, 94, .12),
+0 6px 24px -6px rgba(34, 197, 94, .35);
+}
