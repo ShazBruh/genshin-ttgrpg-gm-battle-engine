@@ -1,0 +1,8 @@
+{
+  "TEYVAT-ALTERED": { "role": "player", "name": "Player" },
+  "LUQMAN-01":     { "role": "player", "name": "Luqman" },
+  "ARSYAD-02":      { "role": "player", "name": "Arsyad" },
+  "RAYYAN-03":       { "role": "player", "name": "Rayyan" },
+  "MULLET-04":       { "role": "player", "name": "Mullet" },
+  "AYIEM-05":       { "role": "player", "name": "Ayiem" }
+}

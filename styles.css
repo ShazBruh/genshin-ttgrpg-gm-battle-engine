@@ -12,45 +12,45 @@
 
 body {
   font-family: 'HYWenHei', 'Cinzel', 'Marcellus', ui-serif, Georgia, serif;
-  background-color: #020617; /* slate-950 — the base canvas */
+  background-color: #020617;
 }
 
 /* ============================================================
  *  BACKGROUND LAYER (image + dim overlay)
  *  ============================================================ */
 #bgLayer {
-position: fixed;
-inset: 0;
-z-index: -1;
-pointer-events: none;
-background-color: #020617;
-background-image: radial-gradient(ellipse at top,
-                                  rgba(30,41,59,.65) 0%,
-                                  transparent 65%);
-background-repeat: no-repeat;
-background-size: cover;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: #020617;
+  background-image: radial-gradient(ellipse at top,
+                                    rgba(30,41,59,.65) 0%,
+                                    transparent 65%);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 #bgImage {
-position: absolute;
-inset: 0;
-background-size: cover;
-background-position: center;
-background-repeat: no-repeat;
-display: none;
-transition: background-image .35s ease;
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: none;
+  transition: background-image .35s ease;
 }
 
 #bgDim {
-position: absolute;
-inset: 0;
-background-color: #020617;
-display: none;
-transition: opacity .2s ease;
+  position: absolute;
+  inset: 0;
+  background-color: #020617;
+  display: none;
+  transition: opacity .2s ease;
 }
 
 /* ============================================================
- *  BACKGROUND DIM SLIDER (custom range input)
+ *  BACKGROUND DIM SLIDER
  *  ============================================================ */
 .bg-range {
   -webkit-appearance: none;
@@ -82,20 +82,26 @@ transition: opacity .2s ease;
   cursor: pointer;
 }
 
-/* --- Thin scrollbars --- */
+/* ============================================================
+ *  THIN SCROLLBARS
+ *  ============================================================ */
 .scroll-thin::-webkit-scrollbar { width: 8px; height: 8px; }
 .scroll-thin::-webkit-scrollbar-track { background: rgba(15,23,42,.5); border-radius: 999px; }
 .scroll-thin::-webkit-scrollbar-thumb { background: #334155; border-radius: 999px; }
 .scroll-thin::-webkit-scrollbar-thumb:hover { background: #475569; }
 
-/* --- Log entry fade-in --- */
+/* ============================================================
+ *  LOG ENTRY FADE-IN
+ *  ============================================================ */
 .log-entry { animation: fadeIn .22s ease-out; }
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-3px); }
   to   { opacity: 1; transform: none; }
 }
 
-/* --- Stat +/- buttons --- */
+/* ============================================================
+ *  STAT +/- BUTTONS
+ *  ============================================================ */
 .stat-btn {
   width: 1.15rem; height: 1.15rem;
   display: grid; place-items: center;
@@ -108,7 +114,9 @@ transition: opacity .2s ease;
 .stat-btn:hover  { background: #334155; color: #e2e8f0; }
 .stat-btn:active { transform: scale(.9); }
 
-/* --- Pip indicators --- */
+/* ============================================================
+ *  PIP INDICATORS
+ *  ============================================================ */
 .pip {
   width: .6rem; height: .6rem;
   border-radius: 2px;
@@ -116,7 +124,9 @@ transition: opacity .2s ease;
   transition: background .15s, box-shadow .15s;
 }
 
-/* --- Modal --- */
+/* ============================================================
+ *  MODAL
+ *  ============================================================ */
 .modal {
   position: fixed; inset: 0; z-index: 80;
   display: flex; align-items: center; justify-content: center;
@@ -143,14 +153,18 @@ transition: opacity .2s ease;
   to   { opacity: 1; transform: none; }
 }
 
-/* --- Tabs --- */
+/* ============================================================
+ *  TABS
+ *  ============================================================ */
 .tab-btn.active {
   background: rgba(251,191,36,.14);
   color: #fcd34d;
   border-color: rgba(251,191,36,.5);
 }
 
-/* --- Turn order chip --- */
+/* ============================================================
+ *  TURN ORDER CHIP
+ *  ============================================================ */
 .turn-chip { transition: all .2s ease; }
 .turn-chip.active {
   border-color: #fbbf24;
@@ -158,19 +172,23 @@ transition: opacity .2s ease;
   box-shadow: 0 0 0 2px rgba(251,191,36,.25), 0 0 18px rgba(251,191,36,.25);
 }
 
-/* --- Number input cleanup --- */
+/* ============================================================
+ *  NUMBER INPUT CLEANUP
+ *  ============================================================ */
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 input[type=number] { -moz-appearance: textfield; }
 
-/* --- Focus ring --- */
+/* ============================================================
+ *  FOCUS RING
+ *  ============================================================ */
 select:focus, input:focus, textarea:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(251,191,36,.45);
 }
 
 /* ============================================================
- *  ROUND BANNER (full-screen, amber)
+ *  ROUND BANNER
  *  ============================================================ */
 .round-banner {
   position: fixed; inset: 0; z-index: 100;
@@ -190,7 +208,7 @@ select:focus, input:focus, textarea:focus {
 }
 
 /* ============================================================
- *  TURN BANNER (full-screen, emerald)
+ *  TURN BANNER
  *  ============================================================ */
 .turn-banner {
   position: fixed; inset: 0; z-index: 97;
@@ -212,7 +230,7 @@ select:focus, input:focus, textarea:focus {
 }
 
 /* ============================================================
- *  ELEMENTAL REACTION OVERLAY (full-screen, purple)
+ *  ELEMENTAL REACTION OVERLAY
  *  ============================================================ */
 .reaction-overlay {
   position: fixed; inset: 0; z-index: 95;
@@ -226,6 +244,69 @@ select:focus, input:focus, textarea:focus {
 }
 .reaction-overlay.hidden { display: none; }
 
+/* ============================================================
+ *  PLAYER DOWN BANNER
+ *  Full-screen dramatic overlay. Fires whenever a player's HP
+ *  drops from >0 to 0. Auto-hides after ~2.4s.
+ *  ============================================================ */
+.down-banner {
+  position: fixed; inset: 0; z-index: 98;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center,
+                              rgba(127,29,29,.72) 0%,
+                              rgba(2,6,23,.94) 72%);
+  backdrop-filter: blur(7px);
+  animation: downAnim 2.4s ease-out forwards;
+}
+.down-banner.hidden { display: none; }
+
+.down-inner {
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+}
+
+.down-icon {
+  font-size: clamp(4rem, 12vw, 8rem);
+  line-height: 1;
+  color: #f43f5e;
+  filter: drop-shadow(0 0 40px rgba(244,63,94,.85));
+  animation: downIconPulse 1.4s ease-in-out infinite;
+}
+
+.down-label {
+  font-size: clamp(1rem, 2.4vw, 1.5rem);
+  font-weight: 900;
+  letter-spacing: .5em;
+  text-transform: uppercase;
+  color: #fca5a5;
+  text-shadow: 0 0 24px rgba(244,63,94,.7);
+  padding-left: .5em;
+}
+
+.down-name {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 900;
+  letter-spacing: .06em;
+  background: linear-gradient(to bottom, #fee2e2 0%, #f87171 50%, #7f1d1d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 30px rgba(244,63,94,.75));
+  text-align: center;
+}
+
+@keyframes downAnim {
+  0%   { opacity: 0; transform: scale(.9); }
+  10%  { opacity: 1; transform: scale(1.02); }
+  18%  { transform: scale(1); }
+  82%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.06); }
+}
+@keyframes downIconPulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.08); }
+}
+
 .reaction-inner { display: flex; flex-direction: column; align-items: center; gap: 1.75rem; }
 .reaction-pair  { display: flex; align-items: center; gap: 2rem; }
 
@@ -236,9 +317,9 @@ select:focus, input:focus, textarea:focus {
   background: rgba(15,23,42,.92);
   border: 4px solid currentColor;
   box-shadow:
-  0 0 50px currentColor,
-  0 0 100px rgba(255,255,255,.15),
-  inset 0 0 40px rgba(255,255,255,.06);
+    0 0 50px currentColor,
+    0 0 100px rgba(255,255,255,.15),
+    inset 0 0 40px rgba(255,255,255,.06);
 }
 
 .reaction-plus {
@@ -311,7 +392,627 @@ select:focus, input:focus, textarea:focus {
  *  FIELD PANEL — Dendro Core glow
  *  ============================================================ */
 #corePanel {
-box-shadow:
-inset 0 0 0 1px rgba(34, 197, 94, .12),
-0 6px 24px -6px rgba(34, 197, 94, .35);
+  box-shadow:
+    inset 0 0 0 1px rgba(34, 197, 94, .12),
+    0 6px 24px -6px rgba(34, 197, 94, .35);
+}
+
+/* ==========================================================================
+ *  ════════════════════════════════════════════════════════════════════════
+ *   PHASE 2 — TWO-USER SKELETON STYLES
+ *   Gate screen · Player view · My Character · Upload · Boss bar
+ *  ════════════════════════════════════════════════════════════════════════
+ * ========================================================================== */
+
+
+/* ============================================================
+ *  GATE SCREEN — Code Entry
+ *  ============================================================ */
+
+#gateView {
+  animation: gateFadeIn .5s ease-out;
+}
+
+@keyframes gateFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Exit animation — added by JS when a valid code is accepted */
+#gateView.gate-exit {
+  animation: gateFadeOut .35s ease-in forwards;
+}
+@keyframes gateFadeOut {
+  0%   { opacity: 1; }
+  100% { opacity: 0; pointer-events: none; }
+}
+
+/* Emblem pulse (the ⚔ symbol) */
+#gateView .gate-emblem {
+  display: inline-block;
+  animation: gateEmblemPulse 3.4s ease-in-out infinite;
+}
+@keyframes gateEmblemPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 10px rgba(251,191,36,.35));
+  }
+  50% {
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 22px rgba(251,191,36,.75));
+  }
+}
+
+/* Code input focus glow */
+#gateCodeInput:focus {
+  border-color: #fbbf24 !important;
+  box-shadow:
+    0 0 0 3px rgba(251,191,36,.18),
+    0 0 28px -4px rgba(251,191,36,.55);
+  letter-spacing: .25em;
+}
+#gateCodeInput {
+  letter-spacing: .15em;
+  transition: letter-spacing .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+/* Enter button shine on hover */
+#gateEnterBtn {
+  position: relative;
+  overflow: hidden;
+}
+#gateEnterBtn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255,255,255,.3),
+    transparent);
+  transition: left .6s ease;
+}
+#gateEnterBtn:hover::after {
+  left: 100%;
+}
+
+/* Error shake + red glow */
+#gateView.gate-error {
+  animation: gateShake .45s cubic-bezier(.36,.07,.19,.97);
+}
+@keyframes gateShake {
+  0%, 100% { transform: translateX(0); }
+  15%      { transform: translateX(-10px); }
+  30%      { transform: translateX(9px); }
+  45%      { transform: translateX(-7px); }
+  60%      { transform: translateX(6px); }
+  75%      { transform: translateX(-3px); }
+}
+#gateView.gate-error #gateCodeInput {
+  border-color: #f87171 !important;
+  box-shadow:
+    0 0 0 3px rgba(248,113,113,.22),
+    0 0 32px -4px rgba(248,113,113,.65);
+}
+#gateView.gate-error #gateMsg {
+  color: #fca5a5;
+}
+
+/* Success flash */
+#gateView.gate-success #gateCodeInput {
+  border-color: #4ade80 !important;
+  box-shadow:
+    0 0 0 3px rgba(74,222,128,.22),
+    0 0 32px -4px rgba(74,222,128,.65);
+}
+#gateView.gate-success #gateMsg {
+  color: #86efac;
+}
+
+/* Lockout state — dimmed and inert */
+#gateView.gate-locked {
+  background: rgba(80, 7, 15, .94) !important;
+}
+#gateView.gate-locked .gate-card {
+  border-color: rgba(248,113,113,.5);
+  box-shadow: 0 0 60px -10px rgba(248,113,113,.5);
+}
+#gateView.gate-locked #gateCodeInput,
+#gateView.gate-locked #gateEnterBtn {
+  opacity: .4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+#gateView.gate-locked #gateMsg {
+  color: #fca5a5;
+  font-weight: 700;
+}
+
+
+/* ============================================================
+ *  PREVIEW MODE BANNER (floating chip, bottom-right)
+ *  Shows when the GM is previewing the player view.
+ *  ============================================================ */
+
+.preview-chip {
+  position: fixed;
+  bottom: 4rem;
+  right: 1rem;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .5rem .75rem .5rem 1rem;
+  border-radius: .75rem;
+  background: linear-gradient(135deg,
+    rgba(88,28,135,.92),
+    rgba(15,23,42,.95));
+  border: 1px solid rgba(192,132,252,.5);
+  box-shadow:
+    0 0 0 1px rgba(192,132,252,.15),
+    0 12px 32px -10px rgba(0,0,0,.85),
+    0 0 40px -10px rgba(192,132,252,.55);
+  animation: previewChipIn .3s ease-out;
+}
+.preview-chip.hidden { display: none; }
+
+@keyframes previewChipIn {
+  from { opacity: 0; transform: translateY(8px) scale(.95); }
+  to   { opacity: 1; transform: none; }
+}
+
+.preview-chip-label {
+  font-size: .65rem;
+  font-weight: 900;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #e9d5ff;
+}
+
+.preview-chip-hint {
+  font-size: .65rem;
+  color: #cbd5e1;
+  opacity: .7;
+}
+
+.preview-chip-exit {
+  padding: .25rem .6rem;
+  border-radius: .4rem;
+  font-size: .65rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  background: rgba(192,132,252,.2);
+  color: #e9d5ff;
+  border: 1px solid rgba(192,132,252,.4);
+  transition: background .15s ease, color .15s ease;
+  cursor: pointer;
+}
+.preview-chip-exit:hover {
+  background: rgba(192,132,252,.4);
+  color: #ffffff;
+}
+
+
+/* ============================================================
+ *  PLAYER VIEW — panel translucency & polish
+ *  The player view uses slightly more translucent panels so the
+ *  background image shines through. Extra headroom: panels get a
+ *  subtle inner border glow to feel "alive" without distracting.
+ *  ============================================================ */
+
+/* Player panels intentionally use the same `bg-slate-900/70`
+ u tility class as the GM view (0.7 alpha). No* override —
+ both sides must look visually consistent. */
+
+/* Larger breathing room around the player layout so background
+   is visible in the gutters. */
+body main[data-role="player"] {
+  padding: 1.5rem 1.5rem 2rem;
+}
+
+/* Slightly wider column gutter in the player view */
+body main[data-role="player"] {
+  gap: 1.25rem;
+}
+
+/* Read-only roster cards: tone down the interactive hover state */
+/* Player roster cards are read-only — no hover lift. */
+body main[data-role="player"] #pRoster > div:hover {
+  filter: brightness(1.04);
+}
+
+
+/* ============================================================
+ *  MY CHARACTER PANEL
+ *  ============================================================ */
+
+#myCharPanel {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ambient corner glows — subtle, doesn't distract */
+#myCharPanel::before,
+#myCharPanel::after {
+  content: '';
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: .4;
+  filter: blur(60px);
+  transition: opacity .4s ease;
+}
+#myCharPanel::before {
+  top: -60px; left: -60px;
+  background: radial-gradient(circle, rgba(251,191,36,.6), transparent 70%);
+}
+#myCharPanel::after {
+  bottom: -60px; right: -60px;
+  background: radial-gradient(circle, rgba(96,165,250,.55), transparent 70%);
+}
+
+/* Populated state — glows brighter, feels "owned" */
+#myCharPanel.populated {
+  border-color: rgba(251,191,36,.35);
+  box-shadow:
+    inset 0 0 0 1px rgba(251,191,36,.12),
+    0 0 44px -12px rgba(251,191,36,.35),
+    0 12px 36px -14px rgba(0,0,0,.7);
+}
+#myCharPanel.populated::before,
+#myCharPanel.populated::after {
+  opacity: .75;
+}
+
+/* Empty state placeholder */
+.my-char-empty {
+  text-align: center;
+  padding: 2rem 1rem;
+  border-radius: .75rem;
+  border: 1px dashed rgba(148,163,184,.2);
+  color: #64748b;
+  font-size: .8rem;
+  line-height: 1.6;
+}
+.my-char-empty .hint {
+  font-size: .7rem;
+  color: #475569;
+}
+
+/* Big HP bar for the character sheet */
+.my-char-hp-bar {
+  position: relative;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: #0f172a;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.6);
+}
+.my-char-hp-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  transition: width .4s ease, background .4s ease;
+}
+.my-char-hp-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: .75rem;
+  font-weight: 700;
+  color: #f8fafc;
+  text-shadow: 0 1px 3px rgba(0,0,0,.9);
+  letter-spacing: .05em;
+}
+
+
+/* ============================================================
+ *  UPLOAD PANEL — three visual states
+ *  ============================================================ */
+
+#uploadPanel {
+  transition: border-color .3s ease, box-shadow .3s ease, opacity .3s ease;
+}
+
+/* Available (default) — inviting, slightly amber-tinted border */
+#uploadPanel.upload-available {
+  border-color: rgba(148,163,184,.25);
+}
+
+/* Pending GM approval — amber accent, gentle pulse */
+#uploadPanel.upload-pending {
+  border-color: rgba(251,191,36,.45);
+  box-shadow:
+    inset 0 0 0 1px rgba(251,191,36,.1),
+    0 0 30px -12px rgba(251,191,36,.45);
+  animation: uploadPendingPulse 2.4s ease-in-out infinite;
+}
+@keyframes uploadPendingPulse {
+  0%, 100% { box-shadow:
+    inset 0 0 0 1px rgba(251,191,36,.1),
+    0 0 30px -12px rgba(251,191,36,.35); }
+  50%      { box-shadow:
+    inset 0 0 0 1px rgba(251,191,36,.18),
+    0 0 40px -10px rgba(251,191,36,.6); }
+}
+
+/* Locked — uploaded already, dimmed, inert */
+#uploadPanel.upload-locked {
+  opacity: .55;
+  filter: grayscale(.4);
+}
+#uploadPanel.upload-locked #uploadBtn {
+  cursor: not-allowed;
+  pointer-events: none;
+  background: #0f172a;
+  border-color: #1e293b;
+  color: #475569;
+}
+#uploadPanel.upload-locked #uploadStatus {
+  color: #64748b;
+  font-style: italic;
+}
+
+/* Upload status text */
+#uploadStatus.ok    { color: #86efac !important; font-weight: 600; }
+#uploadStatus.warn  { color: #fcd34d !important; font-weight: 600; }
+#uploadStatus.error { color: #fca5a5 !important; font-weight: 600; }
+
+
+/* ============================================================
+ *  BOSS BAR — cinematic full-width HP strip
+ *  Shown at the top of the player view when a boss entity exists.
+ *  ============================================================ */
+
+#bossBar {
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 0 1px rgba(244,63,94,.2),
+    0 0 60px -18px rgba(244,63,94,.55),
+    0 12px 40px -14px rgba(0,0,0,.7);
+}
+#bossBar.hidden { display: none; }
+
+/* Corner glows */
+#bossBar::before,
+#bossBar::after {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  opacity: .55;
+}
+#bossBar::before {
+  top: -100px; left: -80px;
+  background: radial-gradient(circle, rgba(244,63,94,.75), transparent 70%);
+}
+#bossBar::after {
+  top: -100px; right: -80px;
+  background: radial-gradient(circle, rgba(251,191,36,.55), transparent 70%);
+}
+
+/* Fill shimmer */
+#bossBarFill {
+  position: relative;
+  overflow: hidden;
+}
+#bossBarFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255,255,255,.4),
+    transparent);
+  animation: bossShimmer 2.8s linear infinite;
+  pointer-events: none;
+}
+@keyframes bossShimmer {
+  0%   { left: -40%; }
+  100% { left: 100%; }
+}
+
+/* Critical state — pulse when HP below threshold */
+#bossBar.boss-critical {
+  animation: bossCriticalPulse 1.4s ease-in-out infinite;
+}
+@keyframes bossCriticalPulse {
+  0%, 100% {
+    box-shadow:
+      inset 0 0 0 1px rgba(244,63,94,.35),
+      0 0 60px -18px rgba(244,63,94,.7),
+      0 12px 40px -14px rgba(0,0,0,.7);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 0 1px rgba(244,63,94,.55),
+      0 0 90px -12px rgba(244,63,94,1),
+      0 12px 40px -14px rgba(0,0,0,.7);
+  }
+}
+
+/* Damage flash — added briefly by JS when HP drops */
+#bossBar.boss-hit {
+  animation: bossHitFlash .35s ease-out;
+}
+@keyframes bossHitFlash {
+  0% {
+    filter: brightness(1.6) saturate(1.4);
+    transform: translateX(0);
+  }
+  25% { transform: translateX(-3px); }
+  50% { transform: translateX(3px); }
+  75% { transform: translateX(-2px); }
+  100% {
+    filter: brightness(1) saturate(1);
+    transform: translateX(0);
+  }
+}
+
+/* Phase marker ticks — optional decorative marks on the bar */
+#bossBar .boss-tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(15,23,42,.75);
+  pointer-events: none;
+}
+
+
+/* ============================================================
+ *  SMALL PLAYER-VIEW POLISH
+ *  ============================================================ */
+
+/* Slightly softer header on player view so the background peeks */
+main[data-role="player"] + * { /* no-op, kept for future hooks */ }
+
+/* Larger aura chip inside My Character for visibility */
+#myCharPanel .elem-chip {
+  font-size: 11px;
+  padding: .2rem .55rem;
+}
+
+/* ============================================================
+ *  TERMINAL-STYLE LOG (Minecraft Java chat inspired)
+ *  ============================================================ */
+
+.log-feed {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  background: rgba(2, 6, 23, 0.72);
+  border: 1px solid rgba(30, 41, 59, 0.9);
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.2rem;
+  scrollbar-gutter: stable;
+}
+
+.log-entry {
+  padding: 1px 8px;
+  color: #cbd5e1;
+  word-break: break-word;
+  white-space: normal;
+  transition: background 0.12s ease;
+}
+.log-entry:hover {
+  background: rgba(30, 41, 59, 0.35);
+}
+
+.log-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 3px;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+.log-divider::before,
+.log-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right,
+                              transparent,
+                              rgba(71, 85, 105, 0.85),
+                              transparent);
+}
+
+/* ============================================================
+ *  ROSTER GLOW (clicked from turn order)
+ *  White ring + soft halo, fades out. Uses ::after so it
+ *  doesn't clash with the card's own ring-* / shadow utilities.
+ *  ============================================================ */
+
+.roster-flash {
+  position: relative;
+}
+
+.roster-flash::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  pointer-events: none;
+  animation: rosterFlashRing 1.4s ease-out forwards;
+}
+
+@keyframes rosterFlashRing {
+  0% {
+    box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 1),
+    0 0 40px 10px rgba(255, 255, 255, 0.7),
+    0 0 80px 18px rgba(255, 255, 255, 0.35);
+  }
+  55% {
+    box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.55),
+    0 0 26px 6px rgba(255, 255, 255, 0.35),
+    0 0 50px 10px rgba(255, 255, 255, 0.15);
+  }
+  100% {
+    box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0),
+    0 0 0 0 rgba(255, 255, 255, 0),
+    0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+/* Turn order chips are now buttons */
+.turn-chip {
+  cursor: pointer;
+}
+.turn-chip:active {
+  transform: scale(0.97);
+}
+
+
+/* ============================================================
+ *  REDUCED MOTION — respect user preference
+ *  ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .gate-emblem,
+  #gateView,
+  .round-banner,
+  .turn-banner,
+  .reaction-overlay,
+  .down-banner,
+  .down-icon,
+  #bossBarFill::after,
+  .preview-chip,
+  #uploadPanel.upload-pending,
+  #bossBar.boss-critical,
+  #gateEnterBtn::after {
+  animation: none !important;
+  transition: none !important;
+  }
+  #bossBarFill::after { display: none; }
+  .roster-flash::after { animation: none !important; }
+}
+
+.weapon-icon-wrap {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  line-height: 0;
 }
