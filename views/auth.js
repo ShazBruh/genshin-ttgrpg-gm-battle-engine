@@ -87,7 +87,9 @@ export async function loadCodes() {
  */
 export function subscribeLiveCodes() {
   subscribeCodes((remote) => {
-    const next = {};
+    // Keep the codes we loaded from codes.json!
+    const next = { ...runtimeCodes };
+
     for (const [rawKey, val] of Object.entries(remote || {})) {
       const key = String(rawKey || '').trim().toUpperCase();
       if (!key || CODES[key]) continue;
